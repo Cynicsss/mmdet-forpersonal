@@ -189,6 +189,7 @@ def main():
             if eval_types == ['proposal_fast']:
                 result_file = args.out
                 coco_eval(result_file, eval_types, dataset.coco)
+
             else:
                 if not isinstance(outputs[0], dict):
                     result_files = results2json(dataset, outputs, args.out)
