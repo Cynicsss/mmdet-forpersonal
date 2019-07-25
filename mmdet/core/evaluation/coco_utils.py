@@ -116,7 +116,7 @@ def det2json(dataset, results):
                 data['bbox'] = xyxy2xywh(bboxes[i])
                 data['score'] = float(bboxes[i][4])
                 data['category_id'] = dataset.cat_ids[label]
-                F.write('{},{},{},{},{},{},{},{}'.format(xywh[0], xywh[1], xywh[2], xywh[3], float(bboxes[i][4]), dataset.cat_ids[label], 0, 0))
+                F.write('{},{},{},{},{},{},{},{}\n'.format(xywh[0], xywh[1], xywh[2], xywh[3], float(bboxes[i][4]), dataset.cat_ids[label], 0, 0))
                 json_results.append(data)
     return json_results
 

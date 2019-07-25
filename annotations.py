@@ -53,6 +53,7 @@ def load_colors(num=12):
 
 if __name__ == '__main__':
     i = 0
+    '''
     for img_name in os.listdir('F:/dataset/UNDERALL/coco/val22017'):
         dev_img = cv2.imread('F:/dataset/UNDERALL/coco/val22017/'+img_name)
         with open('F:/dataset/UNDERALL/txtresults1/txtresults/'+str(i)+'.txt', 'r') as reader:
@@ -61,3 +62,9 @@ if __name__ == '__main__':
         cv2.imwrite('F:/dataset/UNDERALL/resultimages/'+img_name, marked_img)
         i += 1
         # cv2.waitKey(0)
+    '''
+    dev_img = cv2.imread('F:/dataset/UNDERALL/mergeimage/21871.jpg')
+    with open('F:/dataset/UNDERALL/mergechangetxt/21871.txt', 'r') as reader:
+        dev_annos = reader.readlines()
+    marked_img = visualize(dev_img, dev_annos)
+    cv2.imwrite('F:/dataset/UNDERALL/a.jpg', marked_img)
