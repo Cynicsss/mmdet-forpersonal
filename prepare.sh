@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
 python3 setup.py develop
-pip3 install pycocotools
-pip3 install terminaltables
-pip3 install mmcv
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pytest
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pycocotools
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple terminaltables
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple mmcv
+#pip3 install mmcv
 mkdir txtresults
 mkdir data
 cd data

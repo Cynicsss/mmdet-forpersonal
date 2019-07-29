@@ -20,7 +20,7 @@ model = dict(
         type='RPNHead',
         in_channels=256,
         feat_channels=256,
-        anchor_scales=[100],
+        anchor_scales=[4],
         anchor_ratios=[0.5, 1.0, 2.0],
         anchor_strides=[4, 8, 16, 32, 64],
         target_means=[.0, .0, .0, .0],
@@ -141,7 +141,7 @@ data = dict(
         with_label=False,
         test_mode=True))
 # optimizer
-optimizer = dict(type='SGD', lr=0.015, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
 lr_config = dict(

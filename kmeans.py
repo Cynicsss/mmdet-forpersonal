@@ -3,6 +3,7 @@
 # 通过k-means ++ 算法获取YOLOv2需要的anchors的尺寸
 import numpy as np
 import os
+import cv2
 
 # 定义Box类，描述bounding box的坐标
 class Box():
@@ -156,10 +157,14 @@ def compute_centroids(label_path,n_anchors,loss_convergence,grid_size,iterations
 
     for label_file in os.listdir(label_path):
         f = open(label_path + label_file)
+        image = cv2.imread('F:/dataset/UNDERALL/2018origin/train/images/' + label_file[:-4] + '.jpg')
+        w, h = image.shape[1], image.shape[0]
+        w_rate, h_rate = w / 512, h / 512
         for line in f:
             temp = line.strip().split(",")
             if len(temp) > 1:
-                boxes.append(Box(0, 0, float(temp[2]), float(temp[3])))
+
+                boxes.append(Box(0, 0, float(temp[2]) / w_rate, float(temp[3]) / h_rate))
 
     if plus:
         centroids = init_centroids(boxes, n_anchors)
