@@ -1,11 +1,13 @@
 # coding=utf-8
 # k-means ++ for YOLOv2 anchors
 # 通过k-means ++ 算法获取YOLOv2需要的anchors的尺寸
+# coding=utf-8
+# k-means ++ for YOLOv3 anchors
+# 通過k-means ++ 算法獲取YOLOv3需要的anchors的尺寸
 import numpy as np
 import os
-import cv2
 
-# 定义Box类，描述bounding box的坐标
+# 定義Box類，描述bounding box的座標
 class Box():
     def __init__(self, x, y, w, h):
         self.x = x
@@ -14,12 +16,12 @@ class Box():
         self.h = h
 
 
-# 计算两个box在某个轴上的重叠部分
-# x1是box1的中心在该轴上的坐标
-# len1是box1在该轴上的长度
-# x2是box2的中心在该轴上的坐标
-# len2是box2在该轴上的长度
-# 返回值是该轴上重叠的长度
+# 計算兩個box在某個軸上的重疊部分
+# x1是box1的中心在該軸上的座標
+# len1是box1在該軸上的長度
+# x2是box2的中心在該軸上的座標
+# len2是box2在該軸上的長度
+# 返回值是該軸上重疊的長度
 def overlap(x1, len1, x2, len2):
     len1_half = len1 / 2
     len2_half = len2 / 2
@@ -30,9 +32,9 @@ def overlap(x1, len1, x2, len2):
     return right - left
 
 
-# 计算box a 和box b 的交集面积
-# a和b都是Box类型实例
-# 返回值area是box a 和box b 的交集面积
+# 計算box a 和box b 的交集面積
+# a和b都是Box類型實例
+# 返回值area是box a 和box b 的交集面積
 def box_intersection(a, b):
     w = overlap(a.x, a.w, b.x, b.w)
     h = overlap(a.y, a.h, b.y, b.h)
@@ -43,26 +45,26 @@ def box_intersection(a, b):
     return area
 
 
-# 计算 box a 和 box b 的并集面积
-# a和b都是Box类型实例
-# 返回值u是box a 和box b 的并集面积
+# 計算 box a 和 box b 的並集面積
+# a和b都是Box類型實例
+# 返回值u是box a 和box b 的並集面積
 def box_union(a, b):
     i = box_intersection(a, b)
     u = a.w * a.h + b.w * b.h - i
     return u
 
 
-# 计算 box a 和 box b 的 iou
-# a和b都是Box类型实例
+# 計算 box a 和 box b 的 iou
+# a和b都是Box類型實例
 # 返回值是box a 和box b 的iou
 def box_iou(a, b):
     return box_intersection(a, b) / box_union(a, b)
 
 
-# 使用k-means ++ 初始化 centroids，减少随机初始化的centroids对最终结果的影响
-# boxes是所有bounding boxes的Box对象列表
+# 使用k-means ++ 初始化 centroids，減少隨機初始化的centroids對最終結果的影響
+# boxes是所有bounding boxes的Box對象列表
 # n_anchors是k-means的k值
-# 返回值centroids 是初始化的n_anchors个centroid
+# 返回值centroids 是初始化的n_anchors個centroid
 def init_centroids(boxes,n_anchors):
     centroids = []
     boxes_num = len(boxes)
@@ -100,13 +102,13 @@ def init_centroids(boxes,n_anchors):
     return centroids
 
 
-# 进行 k-means 计算新的centroids
-# boxes是所有bounding boxes的Box对象列表
+# 進行 k-means 計算新的centroids
+# boxes是所有bounding boxes的Box對象列表
 # n_anchors是k-means的k值
 # centroids是所有簇的中心
-# 返回值new_centroids 是计算出的新簇中心
-# 返回值groups是n_anchors个簇包含的boxes的列表
-# 返回值loss是所有box距离所属的最近的centroid的距离的和
+# 返回值new_centroids 是計算出的新簇中心
+# 返回值groups是n_anchors個簇包含的boxes的列表
+# 返回值loss是所有box距離所屬的最近的centroid的距離的和
 def do_kmeans(n_anchors, boxes, centroids):
     loss = 0
     groups = []
@@ -135,36 +137,35 @@ def do_kmeans(n_anchors, boxes, centroids):
     return new_centroids, groups, loss
 
 
-# 计算给定bounding boxes的n_anchors数量的centroids
-# label_path是训练集列表文件地址
-# n_anchors 是anchors的数量
-# loss_convergence是允许的loss的最小变化值
-# grid_size * grid_size 是栅格数量
-# iterations_num是最大迭代次数
-# plus = 1时启用k means ++ 初始化centroids
+# 計算給定bounding boxes的n_anchors數量的centroids
+# label_path是訓練集列表文件地址
+# n_anchors 是anchors的數量
+# loss_convergence是允許的loss的最小變化值
+# grid_size * grid_size 是柵格數量
+# iterations_num是最大迭代次數
+# plus = 1時啓用k means ++ 初始化centroids
 def compute_centroids(label_path,n_anchors,loss_convergence,grid_size,iterations_num,plus):
 
     boxes = []
     label_files = []
+    f = os.listdir(label_path)
     # f = open(label_path)
     # for line in f:
-    #     label_path = line.rstrip().replace('images', 'labels')
-    #     label_path = label_path.replace('JPEGImages', 'labels')
-    #     label_path = label_path.replace('.jpg', '.txt')
-    #     label_path = label_path.replace('.JPEG', '.txt')
-    #     label_files.append(label_path)
+        #label_path = line.rstrip().replace('images', 'labels')
+        #label_path = label_path.replace('JPEGImages', 'labels')
+        #label_path = label_path.replace('.jpg', '.txt')
+        #label_path = label_path.replace('.JPEG', '.txt')
+        #label_files.append(label_path)
+        # label_files.append(line.rstrip())
+
     # f.close()
 
-    for label_file in os.listdir(label_path):
+    for label_file in f:
         f = open(label_path + label_file)
-        image = cv2.imread('F:/dataset/UNDERALL/2018origin/train/images/' + label_file[:-4] + '.jpg')
-        w, h = image.shape[1], image.shape[0]
-        w_rate, h_rate = w / 512, h / 512
         for line in f:
             temp = line.strip().split(",")
             if len(temp) > 1:
-
-                boxes.append(Box(0, 0, float(temp[2]) / w_rate, float(temp[3]) / h_rate))
+                boxes.append(Box(0, 0, float(temp[2]), float(temp[3])))
 
     if plus:
         centroids = init_centroids(boxes, n_anchors)
@@ -186,15 +187,12 @@ def compute_centroids(label_path,n_anchors,loss_convergence,grid_size,iterations
         old_loss = loss
 
         for centroid in centroids:
-            # print(centroid.w * grid_size, centroid.h * grid_size)
             print(centroid.w , centroid.h)
 
     # print result
     for centroid in centroids:
         print("k-means result：\n")
         print(centroid.w, centroid.h)
-        # print(centroid.w * grid_size, centroid.h * grid_size)
-
 
 label_path = "F:/dataset/UNDERALL/2018origin/train/annotations/"
 n_anchors = 9

@@ -11,6 +11,10 @@ mkdir data
 cd data
 hdfs dfs -get $PAI_DEFAULT_FS_URI/data/datasets/2018origincoco.zip
 unzip -q 2018origincoco.zip
+mv ./coco/train2017 ./coco/traintotal
+mv ./coco/train2019 ./coco/train2017
+mv ./coco/annotations/instances_train2017.json ./coco/annotations/instances_traintotal.json
+mv ./coco/annotations/instances_train2019.json ./coco/annotations/instances_train2017.json
 cd ..
 hdfs dfs -get $PAI_DEFAULT_FS_URI/data/models/zhangyu/resnext101_64x4d-ee2c6f71.pth
 mv ./resnext101_64x4d-ee2c6f71.pth /root/.cache/torch/checkpoints/
